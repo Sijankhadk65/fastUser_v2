@@ -208,13 +208,10 @@ class _HomeScreenState extends State<HomeScreen>
                                 snapshot.data!
                                     .map((order) => order!.cartLength)
                                     .toList()
-                                    .fold(
-                                      0,
-                                      (previousValue, element) =>
-                                          int.parse(
-                                            previousValue.toString(),
-                                          ) +
-                                          int.parse(
+                                    .reduce(
+                                      (value, element) =>
+                                          double.parse(value.toString()) +
+                                          double.parse(
                                             element.toString(),
                                           ),
                                     )

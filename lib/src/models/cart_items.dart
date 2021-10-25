@@ -24,8 +24,8 @@ abstract class CartItem implements Built<CartItem, CartItemBuilder> {
       };
 }
 
-CartItem? parseToCartItem(Map<String, dynamic> json) {
-  return jsonSerializer.deserializeWith(CartItem.serializer, json);
+CartItem parseToCartItem(Map<String, dynamic> json) {
+  return jsonSerializer.deserializeWith(CartItem.serializer, json)!;
 }
 
 CartItem? newFromItemModel(MenuItem item) {

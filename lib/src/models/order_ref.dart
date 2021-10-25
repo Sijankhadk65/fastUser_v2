@@ -28,6 +28,8 @@ abstract class OrderRef implements Built<OrderRef, OrderRefBuilder> {
   double? get lat;
 
   double? get lang;
+
+  BuiltList<String>? get promoCodes;
   OrderRef._();
   factory OrderRef([updates(OrderRefBuilder b)]) = _$OrderRef;
   static Serializer<OrderRef> get serializer => _$orderRefSerializer;

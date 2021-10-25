@@ -18,7 +18,7 @@ class AddToCartDialouge extends StatefulWidget {
   final Map<String, dynamic>? user;
   final String? vendorName, vendorID;
   final int? minOrder;
-  final bool? shouldSchedule, isNight;
+  final bool shouldSchedule, isNight;
   final DateTime? openingTime, closingTime;
   const AddToCartDialouge({
     Key? key,
@@ -30,7 +30,7 @@ class AddToCartDialouge extends StatefulWidget {
     this.shouldSchedule = false,
     this.openingTime,
     this.closingTime,
-    this.isNight,
+    this.isNight = false,
   }) : super(key: key);
 
   @override
@@ -277,7 +277,7 @@ class _AddToCartDialougeState extends State<AddToCartDialouge> {
                     ],
                   ),
                   widget.item!.price == 0
-                      ? StreamBuilder<Varient>(
+                      ? StreamBuilder<Varient?>(
                           stream: _cartItemBloc.currentSelectedVarient,
                           builder: (context, snapshot) {
                             return VarientButtonBar(
@@ -360,7 +360,7 @@ class _AddToCartDialougeState extends State<AddToCartDialouge> {
                   children: [
                     widget.item!.addOns != null
                         ? widget.item!.addOns!.isNotEmpty
-                            ? StreamBuilder<List<AddOn>>(
+                            ? StreamBuilder<List<AddOn?>>(
                                 initialData: [],
                                 stream: _cartItemBloc.currentSelectedAddons,
                                 builder: (context, snapshot) {
@@ -497,7 +497,7 @@ class _AddToCartDialougeState extends State<AddToCartDialouge> {
                                       shouldSchedule: widget.shouldSchedule!,
                                       openingTime: widget.openingTime!,
                                       closingTime: widget.closingTime!,
-                                      isNight: widget.isNight!,
+                                      isNight: widget.isNight,
                                       user: widget.user!,
                                       vendor: widget.vendorName!,
                                       vendorID: widget.vendorID!,

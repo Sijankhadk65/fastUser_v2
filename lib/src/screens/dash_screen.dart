@@ -64,7 +64,7 @@ class _DashScreenState extends State<DashScreen> {
                 CategoriesCard(
                   assetPath: "assets/svg/cafe.svg",
                   category: "Restaurants",
-                  message: "A curated list of resturants near you.",
+                  message: "A curated list of restaurants near you.",
                   onTap: () {
                     Navigator.push(
                       context,

@@ -23,19 +23,21 @@ class CommunityDetailScreen extends StatefulWidget {
   final Map<String, dynamic>? user;
   final bool? shouldSchedule, isNight;
 
-  const CommunityDetailScreen(
-      {Key? key,
-      this.communityItem,
-      this.isNight,
-      this.user,
-      this.categories,
-      this.vendorName,
-      this.vendorID,
-      this.openingTime,
-      this.minOrder,
-      this.shouldSchedule,
-      this.closingTime})
-      : super(key: key);
+  const CommunityDetailScreen({
+    Key? key,
+    this.communityItem,
+    this.isNight,
+    this.user,
+    this.categories,
+    this.vendorName,
+    this.vendorID,
+    this.openingTime,
+    this.minOrder,
+    this.shouldSchedule,
+    this.closingTime,
+  }) : super(
+          key: key,
+        );
 
   @override
   _CommunityDetailScreenState createState() => _CommunityDetailScreenState();
@@ -271,7 +273,7 @@ class _CommunityDetailScreenState extends State<CommunityDetailScreen> {
                                                                               .minOrder,
                                                                       shouldSchedule:
                                                                           widget
-                                                                              .shouldSchedule,
+                                                                              .shouldSchedule!,
                                                                     ),
                                                                   ),
                                                                 );

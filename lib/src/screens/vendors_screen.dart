@@ -39,7 +39,6 @@ class _VendorsScreenState extends State<VendorsScreen> {
               child: CircularProgressIndicator(),
             );
           case ConnectionState.active:
-            print(widget.tag);
             return snapshot.data!.isNotEmpty
                 ? StreamBuilder<List<String>>(
                     stream: _cartMenuBloc.getFavourites(

@@ -1,7 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:hive/hive.dart';
 
 import 'cart_items.dart';
 import 'serializer.dart';
@@ -18,7 +17,6 @@ abstract class OnlineOrder implements Built<OnlineOrder, OnlineOrderBuilder> {
   String? get vendorName;
   int? get minOrder;
   BuiltList<CartItem>? get items;
-  BuiltList<String>? get promoCodes;
 
   OnlineOrder._();
   factory OnlineOrder([updates(OnlineOrderBuilder b)]) = _$OnlineOrder;
@@ -36,5 +34,4 @@ Map<String, dynamic> onlineOrderToJson(OnlineOrder order) => {
       "vendor": order.vendor,
       "vendorName": order.vendorName,
       "items": order.items?.toList().map((e) => e.toJson()).toList(),
-      "promoCodes": order.promoCodes?.toList(),
     };

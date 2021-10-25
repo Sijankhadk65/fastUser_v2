@@ -20,9 +20,9 @@ class UserInfoScreen extends StatefulWidget {
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  late LoginBloc _loginBloc;
-  late LocationResult _result;
-  late FocusNode _textFocusNode;
+  LoginBloc? _loginBloc;
+  LocationResult? _result;
+  FocusNode? _textFocusNode;
   // TextEditingController _nameController, _phoneNumberController;
   // PageController _pageController;
   // int _currentIndex = 0;
@@ -44,7 +44,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   @override
   void dispose() {
-    _textFocusNode.dispose();
+    _textFocusNode!.dispose();
     super.dispose();
   }
 
@@ -72,22 +72,22 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               ),
             ),
             StreamBuilder<String>(
-              stream: _loginBloc.name,
+              stream: _loginBloc!.name,
               builder: (context, snapshot) {
                 return InputField(
-                  onChanged: _loginBloc.changeName,
+                  onChanged: _loginBloc!.changeName,
                   label: "Name",
                   hint: "John Doe",
                   // autoFoucs: true,
-                  onSubmitted: (value) => _textFocusNode.requestFocus(),
+                  onSubmitted: (value) => _textFocusNode!.requestFocus(),
                 );
               },
             ),
             StreamBuilder<String>(
-              stream: _loginBloc.phoneNumber,
+              stream: _loginBloc!.phoneNumber,
               builder: (context, snapshot) {
                 return InputField(
-                  onChanged: _loginBloc.changePhoneNumber,
+                  onChanged: _loginBloc!.changePhoneNumber,
                   label: "Phone Number",
                   hint: "98-XXX-XXX-XX",
                   keyboardType: TextInputType.number,
@@ -182,7 +182,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           Column(
                             children: [
                               StreamBuilder<Map<String, dynamic>>(
-                                stream: _loginBloc.homeLocation,
+                                stream: _loginBloc!.homeLocation,
                                 initialData: {},
                                 builder: (context, snapshot) {
                                   return LocationPicker(
@@ -198,12 +198,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                               "AIzaSyATdr7r2cCqiNWcgv9VQSYKf7k50Qzx7IY"),
                                         ),
                                       );
-                                      _loginBloc.changeHomeLocation(
+                                      _loginBloc!.changeHomeLocation(
                                         {
-                                          "lat": _result.latLng!.latitude,
-                                          "lang": _result.latLng!.longitude,
+                                          "lat": _result!.latLng!.latitude,
+                                          "lang": _result!.latLng!.longitude,
                                           "physicalLocation":
-                                              _result.formattedAddress,
+                                              _result!.formattedAddress,
                                         },
                                       );
                                     },
@@ -212,7 +212,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               ),
                               _result == null ? const Divider() : Container(),
                               StreamBuilder<Map<String, dynamic>>(
-                                stream: _loginBloc.officeLocation,
+                                stream: _loginBloc!.officeLocation,
                                 initialData: {},
                                 builder: (context, snapshot) {
                                   return LocationPicker(
@@ -228,12 +228,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                               "AIzaSyATdr7r2cCqiNWcgv9VQSYKf7k50Qzx7IY"),
                                         ),
                                       );
-                                      _loginBloc.changeOfficeLocation(
+                                      _loginBloc!.changeOfficeLocation(
                                         {
-                                          "lat": _result.latLng!.latitude,
-                                          "lang": _result.latLng!.longitude,
+                                          "lat": _result!.latLng!.latitude,
+                                          "lang": _result!.latLng!.longitude,
                                           "physicalLocation":
-                                              _result.formattedAddress,
+                                              _result!.formattedAddress,
                                         },
                                       );
                                     },
@@ -269,14 +269,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 children: [
                   Expanded(
                     child: StreamBuilder<bool>(
-                      stream: _loginBloc.canSubmitData,
+                      stream: _loginBloc!.canSubmitData,
                       builder: (context, snapshot) {
                         return RawMaterialButton(
                           padding: const EdgeInsets.symmetric(
                             vertical: 15,
                           ),
                           onPressed: snapshot.hasData
-                              ? () => _loginBloc.saveUser(widget.user)
+                              ? () => _loginBloc!.saveUser(widget.user)
                               : null,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(

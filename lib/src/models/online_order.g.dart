@@ -83,14 +83,6 @@ class _$OnlineOrderSerializer implements StructuredSerializer<OnlineOrder> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(CartItem)])));
     }
-    value = object.promoCodes;
-    if (value != null) {
-      result
-        ..add('promoCodes')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
     return result;
   }
 
@@ -145,12 +137,6 @@ class _$OnlineOrderSerializer implements StructuredSerializer<OnlineOrder> {
                       BuiltList, const [const FullType(CartItem)]))!
               as BuiltList<Object?>);
           break;
-        case 'promoCodes':
-          result.promoCodes.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
       }
     }
 
@@ -177,8 +163,6 @@ class _$OnlineOrder extends OnlineOrder {
   final int? minOrder;
   @override
   final BuiltList<CartItem>? items;
-  @override
-  final BuiltList<String>? promoCodes;
 
   factory _$OnlineOrder([void Function(OnlineOrderBuilder)? updates]) =>
       (new OnlineOrderBuilder()..update(updates)).build();
@@ -192,8 +176,7 @@ class _$OnlineOrder extends OnlineOrder {
       this.vendor,
       this.vendorName,
       this.minOrder,
-      this.items,
-      this.promoCodes})
+      this.items})
       : super._();
 
   @override
@@ -215,8 +198,7 @@ class _$OnlineOrder extends OnlineOrder {
         vendor == other.vendor &&
         vendorName == other.vendorName &&
         minOrder == other.minOrder &&
-        items == other.items &&
-        promoCodes == other.promoCodes;
+        items == other.items;
   }
 
   @override
@@ -228,17 +210,15 @@ class _$OnlineOrder extends OnlineOrder {
                     $jc(
                         $jc(
                             $jc(
-                                $jc(
-                                    $jc($jc(0, totalPrice.hashCode),
-                                        refID.hashCode),
-                                    cartLength.hashCode),
-                                status.hashCode),
-                            createdAt.hashCode),
-                        vendor.hashCode),
-                    vendorName.hashCode),
-                minOrder.hashCode),
-            items.hashCode),
-        promoCodes.hashCode));
+                                $jc($jc(0, totalPrice.hashCode),
+                                    refID.hashCode),
+                                cartLength.hashCode),
+                            status.hashCode),
+                        createdAt.hashCode),
+                    vendor.hashCode),
+                vendorName.hashCode),
+            minOrder.hashCode),
+        items.hashCode));
   }
 
   @override
@@ -252,8 +232,7 @@ class _$OnlineOrder extends OnlineOrder {
           ..add('vendor', vendor)
           ..add('vendorName', vendorName)
           ..add('minOrder', minOrder)
-          ..add('items', items)
-          ..add('promoCodes', promoCodes))
+          ..add('items', items))
         .toString();
   }
 }
@@ -299,12 +278,6 @@ class OnlineOrderBuilder implements Builder<OnlineOrder, OnlineOrderBuilder> {
       _$this._items ??= new ListBuilder<CartItem>();
   set items(ListBuilder<CartItem>? items) => _$this._items = items;
 
-  ListBuilder<String>? _promoCodes;
-  ListBuilder<String> get promoCodes =>
-      _$this._promoCodes ??= new ListBuilder<String>();
-  set promoCodes(ListBuilder<String>? promoCodes) =>
-      _$this._promoCodes = promoCodes;
-
   OnlineOrderBuilder();
 
   OnlineOrderBuilder get _$this {
@@ -319,7 +292,6 @@ class OnlineOrderBuilder implements Builder<OnlineOrder, OnlineOrderBuilder> {
       _vendorName = $v.vendorName;
       _minOrder = $v.minOrder;
       _items = $v.items?.toBuilder();
-      _promoCodes = $v.promoCodes?.toBuilder();
       _$v = null;
     }
     return this;
@@ -350,8 +322,7 @@ class OnlineOrderBuilder implements Builder<OnlineOrder, OnlineOrderBuilder> {
               vendor: vendor,
               vendorName: vendorName,
               minOrder: minOrder,
-              items: _items?.build(),
-              promoCodes: _promoCodes?.build());
+              items: _items?.build());
     } catch (_) {
       late String _$failedField;
       try {
@@ -360,8 +331,6 @@ class OnlineOrderBuilder implements Builder<OnlineOrder, OnlineOrderBuilder> {
 
         _$failedField = 'items';
         _items?.build();
-        _$failedField = 'promoCodes';
-        _promoCodes?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'OnlineOrder', _$failedField, e.toString());

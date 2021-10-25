@@ -63,8 +63,9 @@ class _VendorListScreenState extends State<VendorListScreen> {
                         case ConnectionState.active:
                           return CustomTabView(
                             itemCount: snapshot.data!.length,
-                            tabBuilder: (context, index) =>
-                                Text(snapshot.data![index].toUpperCase()),
+                            tabBuilder: (context, index) => Text(
+                              snapshot.data![index].toUpperCase(),
+                            ),
                             pageBuilder: (context, index) => Provider(
                               create: (_) => CartMenuBloc(),
                               child: VendorsScreen(

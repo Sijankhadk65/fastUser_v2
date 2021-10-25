@@ -98,6 +98,14 @@ class _$OrderRefSerializer implements StructuredSerializer<OrderRef> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
+    value = object.promoCodes;
+    if (value != null) {
+      result
+        ..add('promoCodes')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
+    }
     return result;
   }
 
@@ -160,6 +168,12 @@ class _$OrderRefSerializer implements StructuredSerializer<OrderRef> {
           result.lang = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
+        case 'promoCodes':
+          result.promoCodes.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
+              as BuiltList<Object?>);
+          break;
       }
     }
 
@@ -190,6 +204,8 @@ class _$OrderRef extends OrderRef {
   final double? lat;
   @override
   final double? lang;
+  @override
+  final BuiltList<String>? promoCodes;
 
   factory _$OrderRef([void Function(OrderRefBuilder)? updates]) =>
       (new OrderRefBuilder()..update(updates)).build();
@@ -205,7 +221,8 @@ class _$OrderRef extends OrderRef {
       this.physicalLocation,
       this.isAssignedTo,
       this.lat,
-      this.lang})
+      this.lang,
+      this.promoCodes})
       : super._();
 
   @override
@@ -229,7 +246,8 @@ class _$OrderRef extends OrderRef {
         physicalLocation == other.physicalLocation &&
         isAssignedTo == other.isAssignedTo &&
         lat == other.lat &&
-        lang == other.lang;
+        lang == other.lang &&
+        promoCodes == other.promoCodes;
   }
 
   @override
@@ -243,17 +261,19 @@ class _$OrderRef extends OrderRef {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, totalCost.hashCode),
-                                            user.hashCode),
-                                        refID.hashCode),
-                                    deliveryCharge.hashCode),
-                                createdAt.hashCode),
-                            status.hashCode),
-                        vendors.hashCode),
-                    physicalLocation.hashCode),
-                isAssignedTo.hashCode),
-            lat.hashCode),
-        lang.hashCode));
+                                        $jc(
+                                            $jc($jc(0, totalCost.hashCode),
+                                                user.hashCode),
+                                            refID.hashCode),
+                                        deliveryCharge.hashCode),
+                                    createdAt.hashCode),
+                                status.hashCode),
+                            vendors.hashCode),
+                        physicalLocation.hashCode),
+                    isAssignedTo.hashCode),
+                lat.hashCode),
+            lang.hashCode),
+        promoCodes.hashCode));
   }
 
   @override
@@ -269,7 +289,8 @@ class _$OrderRef extends OrderRef {
           ..add('physicalLocation', physicalLocation)
           ..add('isAssignedTo', isAssignedTo)
           ..add('lat', lat)
-          ..add('lang', lang))
+          ..add('lang', lang)
+          ..add('promoCodes', promoCodes))
         .toString();
   }
 }
@@ -327,6 +348,12 @@ class OrderRefBuilder implements Builder<OrderRef, OrderRefBuilder> {
   double? get lang => _$this._lang;
   set lang(double? lang) => _$this._lang = lang;
 
+  ListBuilder<String>? _promoCodes;
+  ListBuilder<String> get promoCodes =>
+      _$this._promoCodes ??= new ListBuilder<String>();
+  set promoCodes(ListBuilder<String>? promoCodes) =>
+      _$this._promoCodes = promoCodes;
+
   OrderRefBuilder();
 
   OrderRefBuilder get _$this {
@@ -343,6 +370,7 @@ class OrderRefBuilder implements Builder<OrderRef, OrderRefBuilder> {
       _isAssignedTo = $v.isAssignedTo?.toBuilder();
       _lat = $v.lat;
       _lang = $v.lang;
+      _promoCodes = $v.promoCodes?.toBuilder();
       _$v = null;
     }
     return this;
@@ -375,7 +403,8 @@ class OrderRefBuilder implements Builder<OrderRef, OrderRefBuilder> {
               physicalLocation: physicalLocation,
               isAssignedTo: _isAssignedTo?.build(),
               lat: lat,
-              lang: lang);
+              lang: lang,
+              promoCodes: _promoCodes?.build());
     } catch (_) {
       late String _$failedField;
       try {
@@ -389,6 +418,9 @@ class OrderRefBuilder implements Builder<OrderRef, OrderRefBuilder> {
 
         _$failedField = 'isAssignedTo';
         _isAssignedTo?.build();
+
+        _$failedField = 'promoCodes';
+        _promoCodes?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'OrderRef', _$failedField, e.toString());

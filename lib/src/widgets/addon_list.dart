@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddOnList extends StatefulWidget {
-  final List<AddOn>? addOns, selectedAddOns;
-  final ValueChanged<AddOn>? onTap;
+  final List<AddOn?>? addOns, selectedAddOns;
+  final ValueChanged<AddOn?>? onTap;
   const AddOnList({
     Key? key,
     this.addOns,

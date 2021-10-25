@@ -223,7 +223,8 @@ class Repository {
 
   Stream<List<MenuItem>> getVendorMenu(String category, String vendor) =>
       _firestoreProvider.getVendorMenu(category, vendor).transform(
-        StreamTransformer<QuerySnapshot, List<MenuItem>>.fromHandlers(
+        StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+            List<MenuItem>>.fromHandlers(
           handleData: (QuerySnapshot snapshot, sink) {
             List<MenuItem> items = [];
             for (var doc in snapshot.docs) {
@@ -254,7 +255,8 @@ class Repository {
 
   Stream<List<Vendor>> getVendors(String tag) =>
       _firestoreProvider.getVendors(tag).transform(
-        StreamTransformer<QuerySnapshot, List<Vendor>>.fromHandlers(
+        StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+            List<Vendor>>.fromHandlers(
           handleData: (QuerySnapshot snapshot, sink) {
             List<Vendor> _vendors = [];
             snapshot.docs.forEach(
@@ -389,7 +391,8 @@ class Repository {
 
   Stream<List<Vendor>> getVegVendors() =>
       _firestoreProvider.getVegVendors().transform(
-        StreamTransformer.fromHandlers(
+        StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+            List<Vendor>>.fromHandlers(
           handleData: (QuerySnapshot snapshot, sink) {
             List<Vendor> vendors = [];
             for (var document in snapshot.docs) {
@@ -405,7 +408,8 @@ class Repository {
       );
   Stream<List<Vendor>> getHalalVendors() =>
       _firestoreProvider.getHalalVendors().transform(
-        StreamTransformer.fromHandlers(
+        StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+            List<Vendor>>.fromHandlers(
           handleData: (QuerySnapshot snapshot, sink) {
             List<Vendor> vendors = [];
             snapshot.docs.forEach(

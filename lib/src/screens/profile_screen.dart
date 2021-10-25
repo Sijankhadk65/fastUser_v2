@@ -147,58 +147,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    StreamBuilder<String?>(
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text("Error: ${snapshot.error}");
-                        }
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                            return const Text("Awaiting bids....");
-                          case ConnectionState.waiting:
-                            return const Center(
-                              child: LinearProgressIndicator(),
-                            );
-                          case ConnectionState.active:
-                            return Container(
-                              padding: const EdgeInsets.only(
-                                right: 15,
-                                left: 12,
-                                top: 8,
-                                bottom: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.orange[300]!.withAlpha(
-                                  100,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  20,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.location_on,
-                                    color: Colors.orange,
+                    Row(
+                      children: [
+                        StreamBuilder<String?>(
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("Error: ${snapshot.error}");
+                            }
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.none:
+                                return const Text("Awaiting bids....");
+                              case ConnectionState.waiting:
+                                return const Center(
+                                  child: LinearProgressIndicator(),
+                                );
+                              case ConnectionState.active:
+                                return Container(
+                                  padding: const EdgeInsets.only(
+                                    right: 15,
+                                    left: 12,
+                                    top: 8,
+                                    bottom: 8,
                                   ),
-                                  Text(
-                                    snapshot.data!,
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.orange,
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange[300]!.withAlpha(
+                                      100,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      20,
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          case ConnectionState.done:
-                            return const Text("The task has completed....");
-                        }
-                      },
-                      stream: orderCartBloc.physicalLocation,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.location_on,
+                                        color: Colors.orange,
+                                      ),
+                                      Text(
+                                        snapshot.data!,
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              case ConnectionState.done:
+                                return const Text("The task has completed....");
+                            }
+                          },
+                          stream: orderCartBloc.physicalLocation,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              _loginBloc.signOut();
+                            },
+                            child: Text("Logout"))
+                      ],
                     ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.center,
@@ -478,110 +487,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    StreamBuilder<Map<String, dynamic>>(
-                                      stream: _loginBloc.officeLocation,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                              "Error: ${snapshot.error}");
-                                        }
-                                        switch (snapshot.connectionState) {
-                                          case ConnectionState.none:
-                                            return const Text(
-                                                "Awaiting Bids......");
-                                          case ConnectionState.waiting:
-                                            return const Center(
-                                              child: LinearProgressIndicator(),
-                                            );
-                                          case ConnectionState.active:
-                                            return snapshot.data!['lat'] ==
-                                                        null &&
-                                                    snapshot.data!['lat'] ==
-                                                        null &&
-                                                    snapshot.data![
-                                                            'physicalLocation'] ==
-                                                        null
-                                                ? RawMaterialButton(
-                                                    onPressed: () async {
-                                                      _result =
-                                                          await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              PlacePicker(
-                                                                  "AIzaSyATdr7r2cCqiNWcgv9VQSYKf7k50Qzx7IY"),
-                                                        ),
-                                                      );
-                                                      _loginBloc
-                                                          .updateUserOfficeLocation(
-                                                        {
-                                                          "lat": _result
-                                                              .latLng!.latitude,
-                                                          "lang": _result
-                                                              .latLng!
-                                                              .longitude,
-                                                          "physicalLocation":
-                                                              _result
-                                                                  .formattedAddress,
-                                                        },
-                                                        userSnapshot
-                                                            .data!.email!,
-                                                      );
-                                                    },
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      left: 10,
-                                                      right: 10,
-                                                    ),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        5,
-                                                      ),
-                                                    ),
-                                                    child: Text(
-                                                      "SELECT A LOCATION",
-                                                      style: GoogleFonts.nunito(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                      ),
-                                                    ),
-                                                    fillColor: Colors.orange,
-                                                  )
-                                                : Row(
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 4,
-                                                        child: Text(
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: StreamBuilder<
+                                              Map<String, dynamic>>(
+                                            stream: _loginBloc.officeLocation,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasError) {
+                                                return Text(
+                                                    "Error: ${snapshot.error}");
+                                              }
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.none:
+                                                  return const Text(
+                                                      "Awaiting Bids......");
+                                                case ConnectionState.waiting:
+                                                  return const Center(
+                                                    child:
+                                                        LinearProgressIndicator(),
+                                                  );
+                                                case ConnectionState.active:
+                                                  return snapshot.data![
+                                                                  'lat'] ==
+                                                              null &&
                                                           snapshot.data![
-                                                                  'physicalLocation']
-                                                              .toString()
-                                                              .toUpperCase(),
-                                                          style: GoogleFonts
-                                                              .nunito(
-                                                            fontSize: 13,
-                                                            color:
-                                                                Colors.orange,
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: IconButton(
-                                                          icon: Icon(
-                                                            EvaIcons
-                                                                .edit2Outline,
-                                                            color: Colors
-                                                                .grey[700],
-                                                            size: 18,
-                                                          ),
+                                                                  'lat'] ==
+                                                              null &&
+                                                          snapshot.data![
+                                                                  'physicalLocation'] ==
+                                                              null
+                                                      ? RawMaterialButton(
                                                           onPressed: () async {
-                                                            await Navigator
-                                                                .push(
+                                                            _result =
+                                                                await Navigator
+                                                                    .push(
                                                               context,
                                                               MaterialPageRoute(
                                                                 builder: (context) =>
@@ -606,15 +547,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                   .data!.email!,
                                                             );
                                                           },
-                                                        ),
-                                                      )
-                                                    ],
-                                                  );
-                                          case ConnectionState.done:
-                                            return const Text(
-                                                "The task has completed");
-                                        }
-                                      },
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            left: 10,
+                                                            right: 10,
+                                                          ),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              5,
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            "SELECT A LOCATION",
+                                                            style: GoogleFonts
+                                                                .nunito(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800,
+                                                            ),
+                                                          ),
+                                                          fillColor:
+                                                              Colors.orange,
+                                                        )
+                                                      : Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              flex: 4,
+                                                              child: Text(
+                                                                snapshot.data![
+                                                                        'physicalLocation']
+                                                                    .toString()
+                                                                    .toUpperCase(),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .nunito(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: IconButton(
+                                                                icon: Icon(
+                                                                  EvaIcons
+                                                                      .edit2Outline,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      700],
+                                                                  size: 18,
+                                                                ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  await Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          PlacePicker(
+                                                                              "AIzaSyATdr7r2cCqiNWcgv9VQSYKf7k50Qzx7IY"),
+                                                                    ),
+                                                                  );
+                                                                  _loginBloc
+                                                                      .updateUserOfficeLocation(
+                                                                    {
+                                                                      "lat": _result
+                                                                          .latLng!
+                                                                          .latitude,
+                                                                      "lang": _result
+                                                                          .latLng!
+                                                                          .longitude,
+                                                                      "physicalLocation":
+                                                                          _result
+                                                                              .formattedAddress,
+                                                                    },
+                                                                    userSnapshot
+                                                                        .data!
+                                                                        .email!,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                case ConnectionState.done:
+                                                  return const Text(
+                                                      "The task has completed");
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

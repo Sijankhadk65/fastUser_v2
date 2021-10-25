@@ -12,7 +12,7 @@ import '../resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OrderCartBloc {
-  List<Map<String, dynamic>> _localOrders = [];
+  List<Map<String, dynamic>?> _localOrders = [];
   int _totalPrice = 0;
   int _totalLength = 0;
   int _cartsTotal = 0;
@@ -221,19 +221,19 @@ class OrderCartBloc {
   }
 
   void addNewOrder(BuildContext context,
-      {required String vendor,
-      required CartItem newItem,
-      required String vendorID,
-      required Map<String, dynamic> user,
-      required bool shouldSchedule,
-      required bool isNight,
-      required DateTime openingTime,
-      required DateTime closingTime,
-      required int minOrder}) {
+      {String? vendor,
+      CartItem? newItem,
+      String? vendorID,
+      Map<String, dynamic>? user,
+      bool? shouldSchedule,
+      bool isNight = false,
+      DateTime? openingTime,
+      DateTime? closingTime,
+      int? minOrder}) {
     if (shouldSchedule == true) {
       var orderScheduleTime = "";
       if (_scheduledTime != "") {
-        if (openingTime.hour > DateTime.parse(_scheduledTime).hour) {
+        if (openingTime!.hour > DateTime.parse(_scheduledTime).hour) {
           if (DateTime.now().hour < 12) {
             orderScheduleTime = getOrderScheduleTime(
               openingTime: openingTime,
@@ -251,13 +251,13 @@ class OrderCartBloc {
       } else {
         if (DateTime.now().hour < 12) {
           orderScheduleTime = getOrderScheduleTime(
-            openingTime: openingTime,
+            openingTime: openingTime!,
             increaseDay: 0,
             increaseHour: 1,
           ).toIso8601String();
         } else {
           orderScheduleTime = getOrderScheduleTime(
-            openingTime: openingTime,
+            openingTime: openingTime!,
             increaseDay: 1,
             increaseHour: 1,
           ).toIso8601String();
@@ -273,7 +273,7 @@ class OrderCartBloc {
     if (_promoCodeIsUsedSubject.value == true) {
       changeCheckoutStatus(false);
     }
-    if (!_localOrders.map((e) => e['vendor']).toList().contains(
+    if (!_localOrders.map((e) => e!['vendor']).toList().contains(
           vendorID,
         )) {
       _localOrders.add(
@@ -286,14 +286,13 @@ class OrderCartBloc {
           "status": [],
           "cartLength": 0,
           "minOrder": minOrder,
-          "promoCodes": []
         },
       );
-      addItemsToCart(vendor: vendorID, newItem: newItem);
+      addItemsToCart(vendor: vendorID!, newItem: newItem!);
       changeLocalOrders(
           _localOrders.map((order) => parseJsonToOnlineOrder(order)).toList());
     } else {
-      addItemsToCart(vendor: vendorID, newItem: newItem);
+      addItemsToCart(vendor: vendorID!, newItem: newItem!);
       changeLocalOrders(
           _localOrders.map((order) => parseJsonToOnlineOrder(order)).toList());
     }
@@ -333,7 +332,7 @@ class OrderCartBloc {
             (promoCode) async {
               if (promoCode.vendors!.isEmpty) {
                 _cartsTotal = _localOrders
-                    .map((order) => order['totalPrice'])
+                    .map((order) => order!['totalPrice'])
                     .toList()
                     .fold(
                       0,
@@ -346,7 +345,7 @@ class OrderCartBloc {
 
                 _localOrders.forEach(
                   (order) {
-                    order['promoCodes'] = [
+                    order!['promoCodes'] = [
                       ...order['promoCodes'],
                       _promoCodeSubject.value,
                     ];
@@ -373,11 +372,11 @@ class OrderCartBloc {
                 changePromoUsedStateUsed(true);
               } else {
                 if (elementChecker(
-                    _localOrders.map((order) => order['vendor']).toList(),
+                    _localOrders.map((order) => order!['vendor']).toList(),
                     promoCode.vendors!.toList())) {
                   for (var vendor in promoCode.vendors!) {
                     for (var order in _localOrders) {
-                      if (order['vendor'] == vendor) {
+                      if (order!['vendor'] == vendor) {
                         order['promoCodes'] = [
                           ...order['promoCodes'],
                           _promoCodeSubject.value,
@@ -388,7 +387,7 @@ class OrderCartBloc {
                     }
                   }
                   _cartsTotal = _localOrders
-                      .map((order) => order['totalPrice'])
+                      .map((order) => order!['totalPrice'])
                       .toList()
                       .fold(
                         0,
@@ -432,13 +431,13 @@ class OrderCartBloc {
   bool elementChecker(List source, List target) =>
       target.every((v) => source.contains(v));
 
-  void addItemsToCart({required String vendor, required CartItem newItem}) {
+  void addItemsToCart({required String? vendor, required CartItem? newItem}) {
     _localOrders.forEach(
       (localOrder) {
-        if (localOrder['vendor'] == vendor) {
+        if (localOrder!['vendor'] == vendor) {
           if (localOrder['items'].isEmpty) {
             localOrder['items'].add(
-              newItem.toJson(),
+              newItem!.toJson(),
             );
             changeCartItems(
               localOrder['items']
@@ -454,7 +453,7 @@ class OrderCartBloc {
                 (item) => item['name'],
               )
               .toList()
-              .contains(newItem.name)) {
+              .contains(newItem!.name)) {
             localOrder['items'].forEach((item) {
               if (item['name'] == newItem.name) {
                 item['quantity'] += newItem.quantity;
@@ -472,7 +471,7 @@ class OrderCartBloc {
               localOrder['items']
                   .map<CartItem>(
                     (item) => parseToCartItem(item),
-                  )
+                  )!
                   .toList(),
             );
             localOrder['totalPrice'] += newItem.totalPrice;
@@ -481,7 +480,7 @@ class OrderCartBloc {
         }
       },
     );
-    getTotalPrice(vendor);
+    getTotalPrice(vendor!);
     getCartLenth(vendor);
     getCurrentOrder(vendor);
   }
@@ -489,7 +488,7 @@ class OrderCartBloc {
   void removeItemFromCart(String vendor, CartItem newItem) {
     _localOrders.forEach(
       (localOrder) {
-        if (localOrder['vendor'] == vendor) {
+        if (localOrder!['vendor'] == vendor) {
           localOrder['totalPrice'] -= newItem.price! * newItem.quantity!;
           localOrder['cartLength'] -= newItem.quantity;
           List<CartItem> items = localOrder['items']
@@ -516,9 +515,9 @@ class OrderCartBloc {
     );
 
     if (_localOrders
-            .where((element) => element['vendor'] == vendor)
+            .where((element) => element!['vendor'] == vendor)
             .toList()
-            .first['items']
+            .first!['items']
             .toString() ==
         "[]") {
       removeCart(vendor);
@@ -528,7 +527,7 @@ class OrderCartBloc {
   void increaseItemCount(String vendor, CartItem newItem) {
     _localOrders.forEach(
       (localOrder) {
-        if (localOrder['vendor'] == vendor) {
+        if (localOrder!['vendor'] == vendor) {
           localOrder['items'].forEach((item) {
             if (item['name'] == newItem.name) {
               item['quantity'] += 1;
@@ -550,7 +549,7 @@ class OrderCartBloc {
 
   void decreaseItemCount(String vendor, CartItem newItem) {
     _localOrders.forEach((localOrder) {
-      if (localOrder['vendor'] == vendor) {
+      if (localOrder!['vendor'] == vendor) {
         localOrder['items'].forEach((item) {
           if (item['name'] == newItem.name) {
             item['quantity'] -= 1;
@@ -572,7 +571,7 @@ class OrderCartBloc {
   getTotalPrice(String vendor) {
     _localOrders.forEach(
       (order) {
-        if (order['vendor'] == vendor) {
+        if (order!['vendor'] == vendor) {
           _totalPrice = order['totalPrice'];
         }
       },
@@ -581,11 +580,15 @@ class OrderCartBloc {
   }
 
   getCartsTotal() {
-    _cartsTotal = _localOrders
-        .map((order) => order['totalPrice'])
+    int cartTotalFinal = 0;
+    _localOrders
+        .map((order) => order!['totalPrice'])
         .toList()
-        .fold(0,
-            (int previousValue, element) => previousValue + int.parse(element));
+        .forEach((element) {
+      cartTotalFinal += int.parse(element.toString());
+    });
+    _cartsTotal = cartTotalFinal;
+
     changeCartsTotal(
       _cartsTotal.toDouble(),
     );
@@ -594,7 +597,7 @@ class OrderCartBloc {
   getCartLenth(String vendor) {
     _localOrders.forEach(
       (order) {
-        if (order['vendor'] == vendor) {
+        if (order!['vendor'] == vendor) {
           _totalLength = order['cartLength'];
         }
       },
@@ -605,7 +608,7 @@ class OrderCartBloc {
   getCurrentOrder(String vendor) {
     _localOrders.forEach(
       (order) {
-        if (order['vendor'] == vendor) {
+        if (order!['vendor'] == vendor) {
           changeCurrentOrder(parseJsonToOnlineOrder(order));
           print("Current Order:${order.toString()}");
         }
@@ -619,7 +622,7 @@ class OrderCartBloc {
     _refID = UniqueKey().toString();
     return createRef(
       {
-        "vendors": _localOrders.map((e) => e['vendor']).toList(),
+        "vendors": _localOrders.map((e) => e!['vendor']).toList(),
         "lat": _checkoutCoordinatesSubject.value['lat'],
         "lang": _checkoutCoordinatesSubject.value['lang'],
         "physicalLocation": _checkoutPhysicalLocationSubject.value,
@@ -648,7 +651,7 @@ class OrderCartBloc {
       () {
         _localOrders.forEach(
           (order) async {
-            order['refID'] = _refID;
+            order!['refID'] = _refID;
             await _repository.saveOrder(order);
           },
         );
@@ -658,7 +661,7 @@ class OrderCartBloc {
   }
 
   removeCart(String vendorName) {
-    _localOrders.removeWhere((cart) => cart['vendor'] == vendorName);
+    _localOrders.removeWhere((cart) => cart!['vendor'] == vendorName);
     getLocalOrder();
     getCurrentOrder("");
   }
@@ -667,7 +670,7 @@ class OrderCartBloc {
     double farthestLocation = 0.0;
     double addableAmount = 20.0;
 
-    if (_localOrders.length == 1 && _localOrders.first['vendor'] == "Liquor") {
+    if (_localOrders.length == 1 && _localOrders.first!['vendor'] == "Liquor") {
       double distance = _calculateDistance(
           _checkoutCoordinatesSubject.value['lat'],
           _checkoutCoordinatesSubject.value['lang'],
@@ -689,7 +692,7 @@ class OrderCartBloc {
       }
     } else {
       _localOrders.forEach((order) {
-        _repository.getVendorLocation(order['vendor']).listen((latlong) {
+        _repository.getVendorLocation(order!['vendor']).listen((latlong) {
           double distance = _calculateDistance(
             _checkoutCoordinatesSubject.value['lat'],
             _checkoutCoordinatesSubject.value['lang'],

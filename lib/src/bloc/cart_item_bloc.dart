@@ -5,11 +5,11 @@ import 'package:rxdart/rxdart.dart';
 class CartItemBloc {
   List<AddOn> _selectedAddOns = [];
 
-  final BehaviorSubject<Varient> _currentSelectedVarientSubject =
-      BehaviorSubject<Varient>();
-  Stream<Varient> get currentSelectedVarient =>
+  final BehaviorSubject<Varient?> _currentSelectedVarientSubject =
+      BehaviorSubject<Varient?>();
+  Stream<Varient?> get currentSelectedVarient =>
       _currentSelectedVarientSubject.stream;
-  Function(Varient) get changeCurrentSelectedVarient =>
+  Function(Varient?) get changeCurrentSelectedVarient =>
       _currentSelectedVarientSubject.sink.add;
 
   final BehaviorSubject<int?> _currentUnitPriceSubject =
@@ -30,11 +30,11 @@ class CartItemBloc {
   Function(int?) get changeCurrentItemCount =>
       _currentItemCountSubject.sink.add;
 
-  final BehaviorSubject<List<AddOn>> _currentSelectedAddonsSubject =
-      BehaviorSubject<List<AddOn>>();
-  Stream<List<AddOn>> get currentSelectedAddons =>
+  final BehaviorSubject<List<AddOn?>> _currentSelectedAddonsSubject =
+      BehaviorSubject<List<AddOn?>>();
+  Stream<List<AddOn?>> get currentSelectedAddons =>
       _currentSelectedAddonsSubject.stream;
-  Function(List<AddOn>) get changeCurrentSelectedAddons =>
+  Function(List<AddOn?>) get changeCurrentSelectedAddons =>
       _currentSelectedAddonsSubject.sink.add;
 
   changeTotalPrice() {
@@ -42,14 +42,14 @@ class CartItemBloc {
         _currentItemCountSubject.value! * _currentUnitPriceSubject.value!);
   }
 
-  void manageAddOn(AddOn addOn) {
+  void manageAddOn(AddOn? addOn) {
     if (_currentSelectedAddonsSubject.value.contains(addOn)) {
-      changeCurrentUnitPrice(_currentUnitPriceSubject.value! - addOn.price!);
+      changeCurrentUnitPrice(_currentUnitPriceSubject.value! - addOn!.price!);
       changeTotalPrice();
       _selectedAddOns.remove(addOn);
       changeCurrentSelectedAddons(_selectedAddOns);
     } else {
-      changeCurrentUnitPrice(_currentUnitPriceSubject.value! + addOn.price!);
+      changeCurrentUnitPrice(_currentUnitPriceSubject.value! + addOn!.price!);
       changeTotalPrice();
       _selectedAddOns.add(addOn);
       changeCurrentSelectedAddons(_selectedAddOns);
@@ -61,15 +61,15 @@ class CartItemBloc {
         "totalPrice": _currentTotalPriceSubject.value,
         "quantity": _currentItemCountSubject.value,
         "price": _currentUnitPriceSubject.value,
-        "addOns": _currentSelectedAddonsSubject.value != null
+        "addOns": _currentSelectedAddonsSubject.hasValue
             ? _currentSelectedAddonsSubject.value
                 .map(
-                  (addOn) => addOn.toNewAddOnJson(),
+                  (addOn) => addOn!.toNewAddOnJson(),
                 )
                 .toList()
             : [],
-        "varient": _currentSelectedVarientSubject.value != null
-            ? _currentSelectedVarientSubject.value.toNewVarientJson()
+        "varient": _currentSelectedVarientSubject.hasValue
+            ? _currentSelectedVarientSubject.value!.toNewVarientJson()
             : {},
         "photoURI": photoURI,
       };
