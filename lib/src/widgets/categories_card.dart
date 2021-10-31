@@ -1,3 +1,4 @@
+import 'package:fast_app_v2_1/src/resources/ui/fonts_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,10 +59,7 @@ class CategoriesCard extends StatelessWidget {
                     children: [
                       Text(
                         category!,
-                        style: GoogleFonts.nunito(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 17,
-                        ),
+                        style: FontSettings.TitleStyleSmallLight(),
                       ),
                       Expanded(
                         child: Text(

@@ -1,172 +1,191 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_app_v2_1/src/bloc/cart_menu_bloc.dart';
 import 'package:fast_app_v2_1/src/models/community_item.dart';
+import 'package:fast_app_v2_1/src/resources/ui/fonts_settings.dart';
 import 'package:fast_app_v2_1/src/screens/community_detail_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CommunityCard extends StatelessWidget {
-  final String? title, description, assetPath;
   final CommunityItem? communityItem;
-  final double? iconSize;
+  // final double? iconSize;
   final Function()? onTap;
   final Map<String, dynamic>? user;
 
-  const CommunityCard(
-      {Key? key,
-      this.title,
-      this.description,
-      this.assetPath,
-      this.iconSize,
-      this.onTap,
-      this.communityItem,
-      this.user})
+  const CommunityCard({Key? key, this.onTap, this.communityItem, this.user})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => Provider(
-              create: (_) => CartMenuBloc(),
-              child: CommunityDetailScreen(
-                communityItem: communityItem,
-                categories: communityItem!.categories,
-                vendorID: "D3RBhAzYAi4rzHJRTic9",
-                vendorName: "The 666s Art",
-                user: user,
-                minOrder: 200,
-                shouldSchedule: false,
-                closingTime: DateTime.now(),
-                openingTime: DateTime.now(),
+    return CachedNetworkImage(
+      imageUrl: communityItem!.photoURI.toString(),
+      progressIndicatorBuilder: (context, msg, progress) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      imageBuilder: (context, imageProvider) => Container(
+        margin: EdgeInsets.only(
+          top: 10,
+          bottom: 10,
+          left: 15,
+          right: 15,
+        ),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 10,
+              offset: Offset(3, 3),
+            )
+          ],
+          borderRadius: BorderRadius.circular(
+            5,
+          ),
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    5,
+                  ),
+                ),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black,
+                    Colors.black.withAlpha(220),
+                    Colors.black.withAlpha(190),
+                    Colors.black.withAlpha(160),
+                    Colors.black.withAlpha(110),
+                    Colors.black.withAlpha(80),
+                    Colors.black.withAlpha(50),
+                    Colors.transparent,
+                    Colors.black.withAlpha(50),
+                    Colors.black.withAlpha(80),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
-          ),
-        )
-      },
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(assetPath!),
+            Container(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 15,
+                bottom: 5,
               ),
-              SizedBox(height: 15),
-              Text(
-                title!,
-                style: TextStyle(fontSize: 14.0),
-              )
-            ],
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  communityItem!.title!,
+                                  style:
+                                      FontSettings.TitleStyleExtraLargeDark(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          communityItem!.description!,
+                          style: FontSettings.DescriptionStyleLargeDark(),
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Provider(
+                                  create: (_) => CartMenuBloc(),
+                                  child: CommunityDetailScreen(
+                                    communityItem: communityItem,
+                                    categories: communityItem!.categories,
+                                    vendorID: "D3RBhAzYAi4rzHJRTic9",
+                                    vendorName: "The 666s Art",
+                                    user: user,
+                                    minOrder: 200,
+                                    shouldSchedule: false,
+                                    closingTime: DateTime.now(),
+                                    openingTime: DateTime.now(),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Visit",
+                            style: GoogleFonts.nunito(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      errorWidget: (context, msg, error) => Container(
+        margin: const EdgeInsets.only(
+          top: 5,
+          bottom: 5,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.all(
+            Radius.circular(5),
           ),
         ),
       ),
     );
-    // return Container(
-    //   margin: EdgeInsets.only(
-    //     top: 5,
-    //     left: 5,
-    //     right: 5,
-    //     bottom: 15,
-    //   ),
-    //   child: Stack(
-    //     children: [
-    //       Container(
-    //         decoration: BoxDecoration(
-    //           color: Colors.white,
-    //           image: DecorationImage(
-    //             image: AssetImage(assetPath),
-    //             fit: BoxFit.cover,
-    //           ),
-    //           borderRadius: BorderRadius.circular(
-    //             5,
-    //           ),
-    //           boxShadow: [
-    //             BoxShadow(
-    //               color: Colors.black12,
-    //               blurRadius: 5,
-    //               offset: Offset(
-    //                 0,
-    //                 8,
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       Container(
-    //         decoration: BoxDecoration(
-    //           borderRadius: BorderRadius.circular(
-    //             5,
-    //           ),
-    //           gradient: LinearGradient(
-    //             begin: Alignment.topCenter,
-    //             end: Alignment.bottomCenter,
-    //             colors: [
-    //               Colors.transparent,
-    //               Colors.transparent,
-    //               Colors.black,
-    //               Colors.black87
-    //             ],
-    //           ),
-    //         ),
-    //         child: Material(
-    //           color: Colors.transparent,
-    //           child: InkWell(
-    //             onTap: onTap,
-    //             borderRadius: BorderRadius.circular(
-    //               13,
-    //             ),
-    //             splashColor: Colors.orange[300],
-    //             child: Padding(
-    //               padding: EdgeInsets.only(
-    //                 left: 15,
-    //                 right: 15,
-    //                 top: 8,
-    //                 bottom: 8,
-    //               ),
-    //               child: Row(
-    //                 children: [
-    //                   Expanded(
-    //                     child: Column(
-    //                       crossAxisAlignment: CrossAxisAlignment.start,
-    //                       mainAxisAlignment: MainAxisAlignment.end,
-    //                       children: <Widget>[
-    //                         Text(
-    //                           title,
-    //                           style: GoogleFonts.nunito(
-    //                             fontWeight: FontWeight.w800,
-    //                             color: Colors.white,
-    //                             fontSize: 16,
-    //                           ),
-    //                         ),
-    //                         Text(
-    //                           description,
-    //                           style: GoogleFonts.montserrat(
-    //                             fontSize:
-    //                                 MediaQuery.of(context).size.height < 1080
-    //                                     ? 8
-    //                                     : 11,
-    //                             fontWeight: FontWeight.w600,
-    //                             color: Colors.white.withAlpha(
-    //                               200,
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
+  }
+}
+
+class ParallaxDelegate extends FlowDelegate {
+  @override
+  BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
+    return BoxConstraints.tightFor(
+      width: constraints.maxWidth,
+    );
+  }
+
+  @override
+  void paintChildren(FlowPaintingContext context) {
+    // TODO: implement paintChildren
+  }
+
+  @override
+  bool shouldRepaint(covariant FlowDelegate oldDelegate) {
+    // TODO: implement shouldRepaint
+    throw UnimplementedError();
   }
 }

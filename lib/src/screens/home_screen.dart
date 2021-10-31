@@ -205,17 +205,19 @@ class _HomeScreenState extends State<HomeScreen>
                             type: MaterialType.circle,
                             child: Center(
                               child: Text(
-                                snapshot.data!
-                                    .map((order) => order!.cartLength)
-                                    .toList()
-                                    .reduce(
-                                      (value, element) =>
-                                          double.parse(value.toString()) +
-                                          double.parse(
-                                            element.toString(),
-                                          ),
-                                    )
-                                    .toString(),
+                                !snapshot.data!.isEmpty
+                                    ? snapshot.data!
+                                        .map((order) => order!.cartLength)
+                                        .toList()
+                                        .reduce(
+                                          (value, element) =>
+                                              double.parse(value.toString()) +
+                                              double.parse(
+                                                element.toString(),
+                                              ),
+                                        )
+                                        .toString()
+                                    : "0",
                                 style: GoogleFonts.oswald(
                                   fontSize: 12,
                                 ),
